@@ -276,7 +276,10 @@ let dbData: DB = {
 
 // Sync Mock/Persistent db data helper
 import { initializeApp } from "firebase/app";
-import { getFirestore, doc, setDoc, getDocs, collection } from "firebase/firestore";
+import { initializeFirestore, setLogLevel, doc, setDoc, getDocs, collection } from "firebase/firestore";
+
+// Set log level to 'error' to suppress benign gRPC listen stream cancel warnings
+setLogLevel("error");
 
 // Initialize Firebase using the configuration credentials
 const firebaseConfigPath = path.join(process.cwd(), "firebase-applet-config.json");
@@ -286,7 +289,9 @@ if (fs.existsSync(firebaseConfigPath)) {
   try {
     const config = JSON.parse(fs.readFileSync(firebaseConfigPath, "utf-8"));
     const firebaseApp = initializeApp(config);
-    firestoreDb = getFirestore(firebaseApp, config.firestoreDatabaseId);
+    firestoreDb = initializeFirestore(firebaseApp, {
+      experimentalForceLongPolling: true,
+    }, config.firestoreDatabaseId);
     console.log("Firebase Firestore initialized successfully in server.ts!");
   } catch (err) {
     console.error("Failed to initialize Firebase in server.ts:", err);
