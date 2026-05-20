@@ -1,0 +1,248 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "Information about a user registered on the mock interview trainer platform.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique user user identifier (can map to Firebase UID)."
+        },
+        "email": {
+          "type": "string",
+          "description": "Registered email address."
+        },
+        "name": {
+          "type": "string",
+          "description": "Full name of the student or trainer."
+        },
+        "role": {
+          "type": "string",
+          "enum": ["student", "trainer", "admin"],
+          "description": "System role controlling dashboard accessibility."
+        },
+        "department": {
+          "type": "string",
+          "description": "Academic department / field specialization."
+        },
+        "isApproved": {
+          "type": "boolean",
+          "description": "Indicates if a trainer profile is approved by moderators."
+        },
+        "avatar": {
+          "type": "string",
+          "description": "URL to profile avatar image."
+        },
+        "bio": {
+          "type": "string",
+          "description": "Professional bio or statement."
+        },
+        "skills": {
+          "type": "array",
+          "description": "Skills and focus competencies of a trainer."
+        },
+        "pricing": {
+          "type": "number",
+          "description": "Hourly consultation price in USD."
+        },
+        "experience": {
+          "type": "number",
+          "description": "Years of professional/industry experience."
+        },
+        "rating": {
+          "type": "number",
+          "description": "Average review rating from 1 to 5."
+        },
+        "totalEarnings": {
+          "type": "number",
+          "description": "Aggregate earnings from finished sessions."
+        }
+      },
+      "required": ["id", "email", "name", "role"]
+    },
+    "Booking": {
+      "title": "Booking Session",
+      "description": "A scheduled mock interview session between a student and a trainer.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique booking session identifier."
+        },
+        "studentId": {
+          "type": "string",
+          "description": "Student user ID."
+        },
+        "studentName": {
+          "type": "string",
+          "description": "Name of the student."
+        },
+        "trainerId": {
+          "type": "string",
+          "description": "Trainer user ID."
+        },
+        "trainerName": {
+          "type": "string",
+          "description": "Name of the trainer."
+        },
+        "dateTime": {
+          "type": "string",
+          "description": "Scheduled date (YYYY-MM-DD)."
+        },
+        "timeSlot": {
+          "type": "string",
+          "description": "Time range selected for the class."
+        },
+        "pricing": {
+          "type": "number",
+          "description": "Agreed price for the session."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["pending", "approved", "rejected", "completed"],
+          "description": "Booking request state."
+        },
+        "feedback": {
+          "type": "object",
+          "description": "Comprehensive evaluation feedback provided by the trainer."
+        },
+        "rating": {
+          "type": "number",
+          "description": "Rating score submitted by the student."
+        },
+        "review": {
+          "type": "string",
+          "description": "Written review content from the student."
+        }
+      },
+      "required": ["id", "studentId", "studentName", "trainerId", "dateTime", "timeSlot", "pricing", "status"]
+    },
+    "ChatMessage": {
+      "title": "Chat Message",
+      "description": "A communication message exchange inside a booking session channel.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique chat message ID."
+        },
+        "bookingId": {
+          "type": "string",
+          "description": "Reference ID to parent Booking session."
+        },
+        "senderId": {
+          "type": "string",
+          "description": "User ID of the message sender."
+        },
+        "senderName": {
+          "type": "string",
+          "description": "Name of the sender displayed in chat UI."
+        },
+        "text": {
+          "type": "string",
+          "description": "Main chat text entry."
+        },
+        "timestamp": {
+          "type": "string",
+          "description": "ISO timestamp of send time."
+        }
+      },
+      "required": ["id", "bookingId", "senderId", "senderName", "text", "timestamp"]
+    },
+    "QuizHistoryItem": {
+      "title": "Quiz History Item",
+      "description": "Resulting score and automated analysis feed from completed AI practice quizzes.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique quiz run ID."
+        },
+        "studentId": {
+          "type": "string",
+          "description": "Student user ID."
+        },
+        "department": {
+          "type": "string",
+          "description": "Academic department topic."
+        },
+        "domain": {
+          "type": "string",
+          "description": "Specific computer science or domain field."
+        },
+        "level": {
+          "type": "string",
+          "description": "Academic level selection."
+        },
+        "score": {
+          "type": "number",
+          "description": "Quiz points achieved."
+        },
+        "totalQuestions": {
+          "type": "number",
+          "description": "Count of index questions."
+        },
+        "date": {
+          "type": "string",
+          "description": "Date quiz took place."
+        },
+        "feedback": {
+          "type": "object",
+          "description": "Diagnostic evaluation summaries of strengths and weaknesses."
+        }
+      },
+      "required": ["id", "studentId", "department", "domain", "level", "score", "totalQuestions", "date", "feedback"]
+    },
+    "ReportItem": {
+      "title": "Report Item",
+      "description": "Abuse complaint filed against spam/malicious platform interactions.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique incident ticket ID."
+        },
+        "reporterName": {
+          "type": "string",
+          "description": "Name of reporter."
+        },
+        "spammerName": {
+          "type": "string",
+          "description": "Name of flagged user structure."
+        },
+        "reason": {
+          "type": "string",
+          "description": "Constructed explanation of abuse."
+        },
+        "status": {
+          "type": "string",
+          "description": "Resolution status."
+        }
+      },
+      "required": ["id", "reporterName", "spammerName", "reason", "status"]
+    }
+  },
+  "firestore": {
+    "users": {
+      "schema": "User",
+      "description": "Root collection storing candidate profiles, certified interviewers, and moderators."
+    },
+    "bookings": {
+      "schema": "Booking",
+      "description": "Root collection of scheduled classes and feedback assessments."
+    },
+    "chats": {
+      "schema": "ChatMessage",
+      "description": "Root collection of message logs indexed by booking ID for interactive workspace panels."
+    },
+    "quizHistory": {
+      "schema": "QuizHistoryItem",
+      "description": "Root collection of historical academic trainer results."
+    },
+    "reports": {
+      "schema": "ReportItem",
+      "description": "Root collection of security or spam report logs."
+    }
+  }
+}

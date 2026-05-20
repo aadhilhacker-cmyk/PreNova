@@ -1,0 +1,6 @@
+{
+  "name": "AI Based Interview Trainer",
+  "description": "A modern, responsive, AI-powered web platform for student-trainer interview prep, interactive AI quizzes, human-trainer booking, and automated resume analysis.",
+  "requestFramePermissions": ["camera", "microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

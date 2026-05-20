@@ -1,0 +1,68 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // 1. Global Safety Net - Default Deny Catch-All
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Common Hardened Helper Functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-\\+]+$');
+    }
+
+    // 2. Collection Rules
+
+    // Users collection
+    match /users/{userId} {
+      allow read: if isSignedIn();
+      allow create, update: if isSignedIn() && (request.auth.uid == userId || request.auth.token.email == "aadhilhacker@gmail.com");
+      allow delete: if isSignedIn() && request.auth.token.email == "aadhilhacker@gmail.com";
+    }
+
+    // Bookings collection
+    match /bookings/{bookingId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn();
+      allow update: if isSignedIn() && (
+        resource.data.studentId == request.auth.uid ||
+        resource.data.trainerId == request.auth.uid ||
+        request.auth.token.email == "aadhilhacker@gmail.com"
+      );
+      allow delete: if isSignedIn() && request.auth.token.email == "aadhilhacker@gmail.com";
+    }
+
+    // Chats collection
+    match /chats/{chatId} {
+      allow read, create: if isSignedIn();
+      allow update, delete: if isSignedIn() && (
+        resource.data.senderId == request.auth.uid ||
+        request.auth.token.email == "aadhilhacker@gmail.com"
+      );
+    }
+
+    // Quiz History collection
+    match /quizHistory/{quizId} {
+      allow read: if isSignedIn() && (resource.data.studentId == request.auth.uid || request.auth.token.email == "aadhilhacker@gmail.com");
+      allow create: if isSignedIn() && request.resource.data.studentId == request.auth.uid;
+      allow update, delete: if isSignedIn() && (resource.data.studentId == request.auth.uid || request.auth.token.email == "aadhilhacker@gmail.com");
+    }
+
+    // Reports collection
+    match /reports/{reportId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn();
+      allow update: if isSignedIn();
+      allow delete: if isSignedIn() && request.auth.token.email == "aadhilhacker@gmail.com";
+    }
+  }
+}
